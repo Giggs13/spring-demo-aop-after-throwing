@@ -19,4 +19,8 @@ public class AopExpressions {
     @Pointcut("daoPackage() && !(getter() || setter())")
     void daoPackageExcludingGettersAndSetters() {
     }
+
+    @Pointcut("execution(* com.giggs13.aop.dao.AccountDAO.findAccounts(..))")
+    void findAccounts() {
+    }
 }

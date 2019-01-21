@@ -48,7 +48,11 @@ public class AccountDAOImpl
     }
 
     @Override
-    public List<Account> findAccounts() {
+    public List<Account> findAccounts(boolean tripWire) {
+        if (tripWire) {
+            throw new RuntimeException("No soup for you!!!");
+        }
+
         List<Account> accounts = new ArrayList<>();
         accounts.add(new Account("John", "Silver"));
         accounts.add(new Account("Madhu", "Platinum"));

@@ -6,15 +6,20 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import java.util.List;
 
-public class AfterReturningDemoApp {
+public class AfterThrowingDemoApp {
 
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context
                 = new AnnotationConfigApplicationContext(DemoConfig.class);
 
         AccountDAOImpl accountDAO = context.getBean(AccountDAOImpl.class);
-        List<Account> accounts = accountDAO.findAccounts();
-        accounts.forEach(System.out::println);
+        try {
+            boolean tripWire = true;
+            List<Account> accounts = accountDAO.findAccounts(tripWire);
+            accounts.forEach(System.out::println);
+        } catch (Exception ex) {
+            System.out.println("\n\nMain Program ... caught exception: " + ex);
+        }
 
         context.close();
     }

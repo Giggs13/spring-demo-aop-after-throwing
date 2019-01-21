@@ -3,6 +3,7 @@ package com.giggs13.aop.aspect;
 import com.giggs13.aop.entity.Account;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -30,14 +31,14 @@ public class LoggingAspect {
     }
 
     @AfterReturning(
-            pointcut = "execution(* com.giggs13.aop.dao.AccountDAO.findAccounts(..))",
+            pointcut = "com.giggs13.aop.aspect.AopExpressions.findAccounts()",
             returning = "result")
     private void afterReturningFindAccountsAdvice(JoinPoint joinPoint,
                                                   List<Account> result) {
         String method = joinPoint.getSignature().toShortString();
-        System.out.println("<--- Executing @AfterReturning advice on a method " + method);
+        System.out.println("\n<--- Executing @AfterReturning advice on a method " + method);
 
-        System.out.println("\nResult is: " + result + "\n");
+        System.out.println("Result is: " + result + "\n");
         convertAccountNamesToUpperCase(result);
     }
 
@@ -46,5 +47,16 @@ public class LoggingAspect {
                 Optional.ofNullable(account.getName())
                         .orElse("Unknown Person")
                         .toUpperCase()));
+    }
+
+    @AfterThrowing(
+            pointcut = "com.giggs13.aop.aspect.AopExpressions.findAccounts()",
+            throwing = "error")
+    private void afterThrowingFindAccountsAdvice(JoinPoint joinPoint,
+                                                 Throwable error) {
+        String method = joinPoint.getSignature().toShortString();
+        System.out.println("\n<--- Executing @AfterThrowing advice on a method " + method);
+
+        System.out.println("Error is: " + error + "\n");
     }
 }
